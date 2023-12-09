@@ -44,7 +44,7 @@ function PassCard({
   async function decrypt() {
     setLoading(true);
 
-    const pr = new ethers.BrowserProvider(window.ethereum);
+    const pr = new ethers.BrowserProvider(window?.ethereum);
     try {
       const address: string[] = await pr.send("eth_requestAccounts", []);
 
