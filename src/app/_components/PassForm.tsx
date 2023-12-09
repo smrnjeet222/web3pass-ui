@@ -53,11 +53,8 @@ export function PassForm() {
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setLoading(true);
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
-    const pr = new ethers.BrowserProvider(window.ethereum);
 
+    const pr = new ethers.BrowserProvider(window.ethereum);
     try {
       const address: string[] = await pr.send("eth_requestAccounts", []);
 
@@ -107,6 +104,7 @@ export function PassForm() {
         ),
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data?.hash, isSuccess]);
 
   return (

@@ -10,7 +10,7 @@ import Navbar from "@/components/navbar";
 import { ThemeProvider } from "@/providers/theme";
 import { ModeToggle } from "@/components/ui/theme-toogler";
 import Footer from "@/components/footer";
-import { Toaster } from "@/components/ui/toaster"
+import { Toaster } from "@/components/ui/toaster";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -18,8 +18,8 @@ const inter = Inter({
 });
 
 export const metadata = {
-  title: "Web3Pass",
-  description: "Web 3 password manager",
+  title: "SafuPass",
+  description: "Your Passwords are safu",
   icons: [{ rel: "icon", url: "/favicon.svg" }],
 };
 
@@ -45,7 +45,7 @@ export default function RootLayout({
               <Footer />
             </TRPCReactProvider>
             <Toaster />
-         </WalletProvider>
+          </WalletProvider>
         </ThemeProvider>
         <Toaster />
       </body>
