@@ -1,65 +1,76 @@
 "use client";
-import { Logo } from "@/assets/logo";
 import { ConnectKitButton } from "connectkit";
 import React from "react";
-import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import Link from "next/link";
+import { Plus } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { PassForm } from "@/app/_components/PassForm";
+import { useAccount } from "wagmi";
 
 function Navbar() {
   return (
     <nav className={cn("relative inset-x-0 z-10 h-16")}>
-      <div className={cn("container flex items-center justify-between p-4")}>
+      <div className={cn("container flex items-center justify-between py-4")}>
         <Link href={"/"}>
-          <h1 className="text-3xl font-black font-mono">Web3Pass</h1>
+          <h1 className="text-3xl font-black font-mono">SAFUPass</h1>
         </Link>
-        <ConnectKitButton.Custom>
-          {({ isConnected, isConnecting, show, ensName, truncatedAddress }) => {
-            if (isConnected) {
+        <div className="flex gap-x-2 items-center">
+          <NewEntry />
+          <ConnectKitButton.Custom>
+            {(
+              { isConnected, isConnecting, show, ensName, truncatedAddress },
+            ) => {
+              if (isConnected) {
+                return (
+                  <Button onClick={show}>
+                    {ensName ?? truncatedAddress}
+                  </Button>
+                );
+              }
               return (
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant={"secondary"}>
-                      {ensName ?? truncatedAddress}
-                    </Button>
-                  </DropdownMenuTrigger>
-
-                  <DropdownMenuContent align="end">
-                    {
-                      /*
-                      <DropdownMenuItem asChild>
-                        <Link href="/me/layers">My Layers</Link>
-                      </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem asChild>
-                          <Link href="/me/aviarts">My AviArts</Link>
-                        </DropdownMenuItem>
-                          <DropdownMenuSeparator />
-                      */
-                    }
-                    <DropdownMenuItem onClick={show}>
-                      Disconnect
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                <Button onClick={show}>
+                  {isConnecting ? "Connecting ..." : "Connet Wallet"}
+                </Button>
               );
-            }
-            return (
-              <Button onClick={show}>
-                {isConnecting ? "Connecting ..." : "Connet Wallet"}
-              </Button>
-            );
-          }}
-        </ConnectKitButton.Custom>
+            }}
+          </ConnectKitButton.Custom>
+        </div>
       </div>
     </nav>
+  );
+}
+
+function NewEntry() {
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button variant={"outline"}>
+          <Plus className="sm:mr-2 h-4 w-4" />
+          <span className="hidden sm:inline">New Entry</span>
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>Add a new entry</DialogTitle>
+          <DialogDescription>
+            Username and Password will be encrypted and stored On-Chain.
+          </DialogDescription>
+        </DialogHeader>
+        <PassForm />
+      </DialogContent>
+    </Dialog>
   );
 }
 

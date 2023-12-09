@@ -1,15 +1,15 @@
 "use client";
 
-import { WagmiConfig, configureChains, createConfig } from "wagmi";
+import { configureChains, createConfig, WagmiConfig } from "wagmi";
 import { ConnectKitProvider, getDefaultConfig } from "connectkit";
 import { publicProvider } from "wagmi/providers/public";
-import { polygonMumbai } from "@wagmi/core/chains";
+import { mainnet } from "@wagmi/core/chains";
 import { env } from "@/env.mjs";
 import { useTheme } from "next-themes";
 
 const { publicClient, webSocketPublicClient, chains } = configureChains(
-  [polygonMumbai],
-  [publicProvider()]
+  [mainnet],
+  [publicProvider()],
 );
 
 const config = createConfig(
@@ -18,12 +18,12 @@ const config = createConfig(
     alchemyId: "", // or infuraId
     walletConnectProjectId: env.NEXT_PUBLIC_WALLET_CONNECT,
     // Required
-    appName: "AviArte",
+    appName: "SAFUPass",
 
     chains,
     publicClient,
     webSocketPublicClient,
-  })
+  }),
 );
 
 // https://docs.family.co/connectkit/customization
