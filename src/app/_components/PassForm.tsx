@@ -16,10 +16,14 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { DialogFooter } from "@/components/ui/dialog";
-import { Eye, EyeOff, Loader2 } from "lucide-react";
-import { useState } from "react";
+import { Check, Eye, EyeOff, Loader2 } from "lucide-react";
+import { useEffect, useState } from "react";
 import { ethers } from "ethers";
 import { encryptMsg } from "@/lib/utils";
+import { useContractWrite } from "wagmi";
+import { ABI, ADDRESS } from "@/contract";
+import { useToast } from "@/components/ui/use-toast";
+import { ToastAction } from "@/components/ui/toast";
 
 const formSchema = z.object({
   domain: z.string().url(),
@@ -28,6 +32,14 @@ const formSchema = z.object({
 });
 
 export function PassForm() {
+  const { toast } = useToast();
+
+  const { data, isLoading, isSuccess, writeAsync, reset } = useContractWrite({
+    address: ADDRESS,
+    abi: ABI,
+    functionName: "addPassword",
+  });
+
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -61,6 +73,10 @@ export function PassForm() {
       );
 
       console.log("encMsg", encMsg);
+
+      await writeAsync({
+        args: [values.domain, encMsg],
+      });
     } catch (err) {
     } finally {
       setLoading(false);
@@ -69,6 +85,29 @@ export function PassForm() {
 
   const [showPass, setShowPass] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (isSuccess) {
+      toast({
+        title: "Transaction Submitted",
+        action: (
+          <ToastAction
+            altText="open"
+            onClick={() => {
+              if (data?.hash) {
+                window.open(
+                  `https://mumbai.polygonscan.com/tx/${data.hash}`,
+                  "_blank",
+                );
+              }
+            }}
+          >
+            Open in Explorer
+          </ToastAction>
+        ),
+      });
+    }
+  }, [data?.hash, isSuccess]);
 
   return (
     <Form {...form}>
@@ -129,11 +168,24 @@ export function PassForm() {
           )}
         />
         <DialogFooter>
-          {loading
+          {loading || isLoading
             ? (
               <Button disabled>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 Please wait
+              </Button>
+            )
+            : isSuccess
+            ? (
+              <Button
+                type="button"
+                onClick={() => {
+                  form.reset();
+                  reset();
+                }}
+              >
+                <Check className="mr-2 h-4 w-4" />
+                Success
               </Button>
             )
             : <Button type="submit">Save</Button>}

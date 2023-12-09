@@ -10,6 +10,7 @@ import Navbar from "@/components/navbar";
 import { ThemeProvider } from "@/providers/theme";
 import { ModeToggle } from "@/components/ui/theme-toogler";
 import Footer from "@/components/footer";
+import { Toaster } from "@/components/ui/toaster"
 
 const inter = Inter({
   subsets: ["latin"],
@@ -43,8 +44,10 @@ export default function RootLayout({
               </div>
               <Footer />
             </TRPCReactProvider>
-          </WalletProvider>
+            <Toaster />
+         </WalletProvider>
         </ThemeProvider>
+        <Toaster />
       </body>
     </html>
   );

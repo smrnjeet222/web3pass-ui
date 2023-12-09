@@ -9,15 +9,11 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { PassForm } from "@/app/_components/PassForm";
-import { useAccount } from "wagmi";
 
 function Navbar() {
   return (

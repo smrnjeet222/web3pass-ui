@@ -3,12 +3,12 @@
 import { configureChains, createConfig, WagmiConfig } from "wagmi";
 import { ConnectKitProvider, getDefaultConfig } from "connectkit";
 import { publicProvider } from "wagmi/providers/public";
-import { mainnet } from "@wagmi/core/chains";
+import { polygonMumbai } from "@wagmi/core/chains";
 import { env } from "@/env.mjs";
 import { useTheme } from "next-themes";
 
 const { publicClient, webSocketPublicClient, chains } = configureChains(
-  [mainnet],
+  [polygonMumbai],
   [publicProvider()],
 );
 
@@ -18,7 +18,7 @@ const config = createConfig(
     alchemyId: "", // or infuraId
     walletConnectProjectId: env.NEXT_PUBLIC_WALLET_CONNECT,
     // Required
-    appName: "SAFUPass",
+    appName: "Web3Pass",
 
     chains,
     publicClient,
