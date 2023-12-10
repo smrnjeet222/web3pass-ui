@@ -14,8 +14,14 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { PassForm } from "@/app/_components/PassForm";
+import { usePathname } from "next/navigation";
 
 function Navbar() {
+  const pathname = usePathname();
+  const condition = pathname.startsWith("/auth/login");
+  if (condition) {
+    return null;
+  }
   return (
     <nav className={cn("relative inset-x-0 z-10 h-16")}>
       <div className={cn("container flex items-center justify-between py-4")}>
@@ -48,7 +54,7 @@ function Navbar() {
   );
 }
 
-function NewEntry() {
+export function NewEntry() {
   return (
     <Dialog>
       <DialogTrigger asChild>

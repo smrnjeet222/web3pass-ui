@@ -13,6 +13,9 @@ import { useState } from "react";
 import { useAccount } from "wagmi";
 
 import { Skeleton } from "@/components/ui/skeleton";
+import { ConnectKitButton } from "connectkit";
+import { PassForm } from "./_components/PassForm";
+import { NewEntry } from "@/components/navbar";
 
 export default function Home() {
   const { address } = useAccount();
@@ -22,12 +25,28 @@ export default function Home() {
     enabled: !!address,
   });
 
+  if (!address) {
+    return (
+      <div className="flex justify-center">
+        <ConnectKitButton />
+      </div>
+    );
+  }
+
   return (
     <>
       <div className="flex justify-center flex-wrap gap-4">
         {isLoading
           ? [1, 2, 3].map((i) => <Skeleton key={i} className="w-60 h-60" />)
           : data?.list.map((data, i) => <PassCard key={i} data={data} />)}
+
+        {data?.list.length === 0 &&
+          (
+            <div className="text-center">
+              <p className="my-5">No Password Stored</p>
+              <NewEntry />
+            </div>
+          )}
       </div>
     </>
   );
